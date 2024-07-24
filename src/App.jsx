@@ -11,11 +11,19 @@ function App() {
   const numbers = numArr.map((el)=><Number handleClick={holdNumber} key={nanoid()}  number={el} />)
   const operators = basicOperator.map((el)=><Operator key={nanoid()} bgColor = "bg-orange-400" color ="text-white" label ={el}/>)
   function holdNumber(event){
-    console.log(event.target.textContent)
+    // console.log(event.target.textContent)
+    const num = event.target.textContent
+    setAnswerField(prev=>{
+      if(prev==='0') return num
+      if(num == '.'){
+        if(prev.includes('.')) return prev
+      }
+      return prev+num
+    })
   }
   return (
     <div className='w-max py-20 m-auto'>
-    <input type='text' className="text-right text-3xl px-3 text-white w-80 bg-slate-400"  value={answerField} />
+    <input type='text' className="text-right text-3xl px-3 text-white w-80 bg-slate-400" value={answerField} />
     <div className="gap-0 bg-red-200 grid grid-cols-[75%_25%]">
       <div className="gray grid grid-cols-3">
       <Operator bgColor ="bg-gray-200"  label ="AC"/>
