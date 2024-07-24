@@ -7,16 +7,19 @@ import Operator from './components/Operator'
 function App() {
   const [resultField, setResultField] = useState("0")
   const [value1, setValue1] = useState(0)
+  const [resultGiven, setResultGiven] = useState(false)
   const [op, setOp] = useState('')
   const numArr = [7, 8, 9, 4, 5, 6, 1, 2, 3], basicOperator = ['÷', 'x', '-', '+', '=']
 
   const numbers = numArr.map((el) => <Number handleClick={holdNumber} key={nanoid()} number={el} />)
   const operators = basicOperator.map((el) => <Operator handleOperation={holdOperator} key={nanoid()} bgColor="bg-orange-400" color="text-white" label={el} />)
   function holdNumber(event) {
-    // console.log(event.target.textContent)
     const num = event.target.textContent
     setResultField(prev => {
-      if (prev === '0'&& num!=='.') return num
+      if ((prev === '0'&& num!=='.')|| resultGiven) {
+        setResultGiven(false)
+        return num
+      }
       if (num == '.') {
         if (prev.includes('.')) return prev
       }
@@ -28,12 +31,13 @@ function App() {
 
     if (operator == 'AC') {
       setResultField('0')
+      
     }
     else if (operator == '+/-') {
       setResultField(prev => (+prev) * -1)
     }
     else if (operator === '=') {
-      
+      setResultGiven(true)
       setResultField(prev => {
         if (op == '+') {
           return parseFloat((parseFloat(value1) + +prev).toFixed(7))
