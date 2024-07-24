@@ -5,9 +5,8 @@ import { useState } from 'react'
 import Operator from './components/Operator'
 
 function App() {
-  const [answerField, setAnswerField] = useState("0")
+  const [resultField, setResultField] = useState("0")
   const [value1, setValue1] = useState(0)
-  const [value2, setValue2] = useState(0)
   const [op, setOp] = useState('')
   const numArr = [7, 8, 9, 4, 5, 6, 1, 2, 3], basicOperator = ['÷', 'x', '-', '+', '=']
 
@@ -16,8 +15,8 @@ function App() {
   function holdNumber(event) {
     // console.log(event.target.textContent)
     const num = event.target.textContent
-    setAnswerField(prev => {
-      if (prev === '0') return num
+    setResultField(prev => {
+      if (prev === '0'&& num!=='.') return num
       if (num == '.') {
         if (prev.includes('.')) return prev
       }
@@ -28,43 +27,43 @@ function App() {
     const operator = event.target.textContent
 
     if (operator == 'AC') {
-      setAnswerField('0')
+      setResultField('0')
     }
     else if (operator == '+/-') {
-      setAnswerField(prev => (+prev) * -1)
+      setResultField(prev => (+prev) * -1)
     }
     else if (operator === '=') {
-      setValue2(answerField)
-      setAnswerField(prev => {
+      
+      setResultField(prev => {
         if (op == '+') {
-          return parseFloat(value1) + +prev
+          return parseFloat((parseFloat(value1) + +prev).toFixed(7))
         }
         if (op == '-') {
-          return parseFloat(value1) - +prev
+          return parseFloat((parseFloat(value1) - +prev).toFixed(7))
         }
         if (op == 'x') {
-          return parseFloat(value1) * +prev
+          return parseFloat((+value1 * +prev).toFixed(7))
         }
         if (op == '÷') {
-          return parseFloat(value1) / +prev
+          return parseFloat((parseFloat(value1) / +prev).toFixed(7))
         }
         if (op == '%') {
-          return parseFloat(value1) % +prev
+          return parseFloat((parseFloat(value1) % +prev).toFixed(7))
         }
         return value1 + op + prev
       })
     }
     else {
 
-      setValue1(answerField)
+      setValue1(resultField)
       setOp(operator)
-      setAnswerField('0')
+      setResultField('0')
     }
 
   }
   return (
     <div className='w-max py-20 m-auto'>
-      <input type='text' className="text-right text-3xl px-3 text-white w-80 bg-slate-400" value={answerField} />
+      <input type='text' className="text-right text-3xl px-3 text-white w-80 bg-slate-400" readOnly value={resultField} />
       <div className="gap-0 bg-red-200 grid grid-cols-[75%_25%]">
         <div className="gray grid grid-cols-3">
           <Operator handleOperation={holdOperator} bgColor="bg-gray-200" label="AC" />
