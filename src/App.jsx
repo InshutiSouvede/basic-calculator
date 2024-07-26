@@ -58,8 +58,11 @@ function App() {
     const operator = event.target.textContent
 
     if (operator == 'AC') {
+      if(resultGiven){
+        setPrevExpression(0)
+        setCurrentExpression(0)
+      }
       setResultField('0')
-      
     }
     else if (operator == '+/-') {
       setResultField(prev => (+prev) * -1)
